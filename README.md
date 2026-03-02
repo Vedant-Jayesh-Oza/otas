@@ -22,38 +22,7 @@ OTAS provides full observability and control over AI systems: see what every AI 
 ---
 
 ## Architecture
-
-```mermaid
-flowchart TB
-    subgraph External [External Components]
-        User[User]
-        Frontend[Frontend ReactJS]
-        BackendSDK[Backend SDK]
-        Agent[AI Agent]
-    end
-
-    subgraph OTAS [OTAS Backend]
-        subgraph UASAM [UASAM Django]
-            UASAMCache[Redis Cache]
-            UASAMDB[(UASAM DB Postgres)]
-        end
-        subgraph Brain [Brain Django]
-            BrainCache[Redis Cache]
-            CeleryQueue[Celery Queue]
-            BrainDB[(Brain DB Postgres)]
-        end
-    end
-
-    User --> Frontend
-    Frontend -->|User/Agent Info| UASAM
-    Frontend -->|Analytics| Brain
-    BackendSDK -->|API Calls| Agent
-    BackendSDK -->|Logs| Brain
-    BackendSDK -->|Auth| UASAM
-    Agent -->|API Calls| BackendSDK
-    Agent -->|Auth| UASAM
-    Agent -->|Logs| Brain
-```
+<img width="699" height="665" alt="image" src="https://github.com/user-attachments/assets/9cb34532-1590-4a71-92ab-c2799083a26e" />
 
 - **UASAM** (port 8000): User and agent management, project creation, authentication, SDK/agent key creation
 - **Brain** (port 8002): Event capture from Backend SDK and agents, Celery for async processing, analytics data
