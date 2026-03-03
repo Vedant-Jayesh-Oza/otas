@@ -13,7 +13,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  otasAccessToken: string | null;
+  accessToken: string | null; // This is the property causing the TS error
   setAuth: (user: User, token: string) => void;
   clearAuth: () => void;
   refreshAuth: () => Promise<void>;
@@ -26,11 +26,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [otasAccessToken, setotasAccessToken] = useState<string | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshAuth = async () => {
-    const token = localStorage.getItem("otasAccessToken");
+    const token = localStorage.getItem("accessToken");
     if (!token) {
       clearAuth();
       return;
@@ -49,14 +49,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const userFromApi = data.response_body.user;
 
         setUser(userFromApi);
-        setotasAccessToken(token);
+        setAccessToken(token);
         localStorage.setItem("user", JSON.stringify(userFromApi));
       } else {
-        console.warn("Authentication failed, logging out.");
         clearAuth();
       }
     } catch (err) {
-      console.error("Network error during authentication:", err);
       clearAuth();
     }
   };
@@ -67,28 +65,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const setAuth = (user: User, token: string) => {
     localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("otasAccessToken", token);
+    localStorage.setItem("accessToken", token);
     setUser(user);
-    setotasAccessToken(token);
+    setAccessToken(token);
   };
 
   const clearAuth = () => {
     localStorage.removeItem("user");
-    localStorage.removeItem("otasAccessToken");
+    localStorage.removeItem("accessToken");
     setUser(null);
-    setotasAccessToken(null);
+    setAccessToken(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        otasAccessToken,
-        setAuth,
-        clearAuth,
-        refreshAuth,
-        isLoading,
-      }}
+      value={{ user, accessToken, setAuth, clearAuth, refreshAuth, isLoading }}
     >
       {children}
     </AuthContext.Provider>
