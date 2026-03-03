@@ -23,9 +23,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
-import {
-  BACKEND_SDK_KEY_CREATE_ENDPOINT,
-} from "../../constants";
+import { BACKEND_SDK_KEY_CREATE_ENDPOINT } from "../../constants";
 
 interface BackendSdkKeyResponse {
   id: string;
@@ -40,12 +38,12 @@ interface BackendSdkKeyResponse {
 
 interface CreateBackendSdkKeyProps {
   projectId: string | undefined;
-  otasAccessToken: string | undefined;
+  accessToken: string | undefined;
 }
 
 export default function CreateBackendSdkKey({
   projectId,
-  otasAccessToken,
+  accessToken,
 }: CreateBackendSdkKeyProps) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<"form" | "success">("form");
@@ -71,7 +69,7 @@ export default function CreateBackendSdkKey({
   };
 
   const handleCreate = async () => {
-    if (!otasAccessToken || !projectId) {
+    if (!accessToken || !projectId) {
       setError("Missing user token or project id.");
       return;
     }
@@ -89,7 +87,7 @@ export default function CreateBackendSdkKey({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-OTAS-USER-TOKEN": otasAccessToken,
+          "X-OTAS-USER-TOKEN": accessToken,
           "X-OTAS-PROJECT-ID": projectId,
         },
         body: JSON.stringify({ validity }),

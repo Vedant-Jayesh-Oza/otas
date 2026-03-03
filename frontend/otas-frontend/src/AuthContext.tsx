@@ -30,7 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   const refreshAuth = async () => {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("otasAccessToken");
     if (!token) {
       clearAuth();
       return;
@@ -65,14 +65,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const setAuth = (user: User, token: string) => {
     localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("accessToken", token);
+    localStorage.setItem("otasAccessToken", token);
     setUser(user);
     setAccessToken(token);
   };
 
   const clearAuth = () => {
     localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem("otasAccessToken");
     setUser(null);
     setAccessToken(null);
   };

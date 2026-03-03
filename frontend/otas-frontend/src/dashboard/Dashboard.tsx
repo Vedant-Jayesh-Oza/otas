@@ -30,7 +30,7 @@ interface Project {
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
-  const { otasAccessToken } = useAuth();
+  const { accessToken } = useAuth();
   const { project_id } = useParams();
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
@@ -40,14 +40,14 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   );
 
   useEffect(() => {
-    if (!otasAccessToken) return;
+    if (!accessToken) return;
 
     const fetchProjects = async () => {
       setProjectsLoading(true);
 
       try {
         const res = await fetch(PROJECT_LIST_ENDPOINT, {
-          headers: { "X-OTAS-USER-TOKEN": otasAccessToken },
+          headers: { "X-OTAS-USER-TOKEN": accessToken },
         });
 
         const result = await res.json();
@@ -66,7 +66,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     };
 
     fetchProjects();
-  }, [otasAccessToken]);
+  }, [accessToken]);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
