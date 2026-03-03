@@ -60,7 +60,7 @@ interface AgentResponse {
 interface CreateAgentProps {
   projectId: string | undefined;
   projectDomain: string | null | undefined;
-  otasAccessToken: string | undefined;
+  accessToken: string | undefined;
   onAgentCreated?: (agent: AgentResponse) => void;
 }
 
@@ -79,7 +79,7 @@ function buildManifest(
 export default function CreateAgent({
   projectId,
   projectDomain,
-  otasAccessToken,
+  accessToken,
   onAgentCreated,
 }: CreateAgentProps) {
   const [open, setOpen] = useState(false);
@@ -124,7 +124,7 @@ export default function CreateAgent({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-OTAS-USER-TOKEN": otasAccessToken || "",
+          "X-OTAS-USER-TOKEN": accessToken || "",
           "X-OTAS-PROJECT-ID": projectId || "",
         },
         body: JSON.stringify({

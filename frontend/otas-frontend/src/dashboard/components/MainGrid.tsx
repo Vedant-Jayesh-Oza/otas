@@ -21,7 +21,7 @@ export default function MainGrid({
   projectId: string | undefined;
   projectDomain: string | null | undefined;
 }) {
-  const { user, otasAccessToken } = useAuth();
+  const { user, accessToken } = useAuth();
   const [rows, setRows] = useState<Algorithm[]>([]);
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export default function MainGrid({
             <CreateAgent
               projectId={projectId}
               projectDomain={projectDomain}
-              otasAccessToken={otasAccessToken || undefined}
+              accessToken={accessToken || undefined}
               onAgentCreated={(agent) => {
                 console.log("Agent created:", agent);
                 // optionally refresh agent list here
@@ -48,7 +48,7 @@ export default function MainGrid({
             />
             <CreateBackendSdkKey
               projectId={projectId}
-              otasAccessToken={otasAccessToken || undefined}
+              accessToken={accessToken || undefined}
             />
           </Box>
         </Box>

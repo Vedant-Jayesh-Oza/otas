@@ -17,7 +17,7 @@ import { CREATE_PROJECT_ENDPOINT } from "../constants";
 
 export default function CreateProject(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
-  const { otasAccessToken } = useAuth();
+  const { accessToken } = useAuth();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -36,7 +36,7 @@ export default function CreateProject(props: { disableCustomTheme?: boolean }) {
       return;
     }
 
-    if (!otasAccessToken) {
+    if (!accessToken) {
       setError("Authentication required");
       return;
     }
@@ -49,7 +49,7 @@ export default function CreateProject(props: { disableCustomTheme?: boolean }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-OTAS-USER-TOKEN": otasAccessToken,
+          "X-OTAS-USER-TOKEN": accessToken,
         },
         body: JSON.stringify({
           project_name: name,

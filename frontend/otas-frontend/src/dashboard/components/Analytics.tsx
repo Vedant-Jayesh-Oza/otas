@@ -13,7 +13,7 @@ export default function Analytics({
 }: {
   projectId: string | undefined;
 }) {
-  const { user, otasAccessToken } = useAuth();
+  const { user, accessToken } = useAuth();
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
