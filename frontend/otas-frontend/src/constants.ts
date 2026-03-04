@@ -32,7 +32,7 @@ export const PASSWORD_UPDATE_V1_ENDPOINT =
 
   // Project and Agent Endpoints
   export const PROJECT_LIST_V1_ENDPOINT = UASAM_ENDPOINT + "/api/project/v1/list/";
-  // ADD THIS LINE to fix the Dashboard.tsx crash:
+  export const AGENT_KEY_REVOKE_ENDPOINT = UASAM_ENDPOINT + "/api/agent/v1/agents/key/revoke/";
   export const PROJECT_LIST_ENDPOINT = PROJECT_LIST_V1_ENDPOINT; 
   export const CREATE_PROJECT_ENDPOINT = UASAM_ENDPOINT + "/api/project/v1/create/";
   export const AGENT_LIST_V1_ENDPOINT = UASAM_ENDPOINT + "/api/agent/v1/list/";

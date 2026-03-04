@@ -10,6 +10,7 @@ import {
   USER_FIELDS_EDIT_V1_ENDPOINT,
   PASSWORD_UPDATE_V1_ENDPOINT,
   AGENT_LIST_V1_ENDPOINT,
+  AGENT_KEY_REVOKE_ENDPOINT,
 } from "../constants";
 import ColorModeIconDropdown from "../shared-ui-theme/ColorModeIconDropdown";
 import IconButton from "@mui/material/IconButton";
@@ -55,6 +56,7 @@ export default function Account(props: { disableCustomTheme?: boolean }) {
   const [agents, setAgents] = useState<Agent[]>([]);
   const [selectedAgentId, setSelectedAgentId] = useState("");
   const [agentsLoading, setAgentsLoading] = useState(false);
+  const [revokingKeyId, setRevokingKeyId] = useState<string | null>(null);
   const [snackBarSuccessValue, snackBarPromptSuccess] = useState<string | null>(null);
   const [snackBarErrorValue, snackBarPromptError] = useState<string | null>(null);
 
@@ -94,6 +96,40 @@ export default function Account(props: { disableCustomTheme?: boolean }) {
       snackBarPromptError("Network error loading agents.");
     } finally {
       setAgentsLoading(false);
+    }
+  };
+
+  const handleRevoke = async (keyId: string) => {
+    if (!accessToken || !projectId) return;
+    setRevokingKeyId(keyId);
+    try {
+      const res = await fetch(AGENT_KEY_REVOKE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-OTAS-USER-TOKEN": accessToken,
+          "X-OTAS-PROJECT-ID": projectId,
+        },
+        body: JSON.stringify({ agent_key_id: keyId }),
+      });
+      const data = await res.json();
+      if (data.status === 1) {
+        setAgents((prev) =>
+          prev.map((agent) => ({
+            ...agent,
+            agent_keys: agent.agent_keys.map((k) =>
+              k.id === keyId ? { ...k, active: false } : k
+            ),
+          }))
+        );
+        snackBarPromptSuccess("Key revoked successfully.");
+      } else {
+        snackBarPromptError("Failed to revoke key.");
+      }
+    } catch {
+      snackBarPromptError("Network error revoking key.");
+    } finally {
+      setRevokingKeyId(null);
     }
   };
 
@@ -223,9 +259,9 @@ export default function Account(props: { disableCustomTheme?: boolean }) {
                       Select an agent to view and manage its API keys.
                     </Typography>
                     <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>Agent</Typography>
-                      <TextField select fullWidth value={selectedAgentId}
-                        onChange={(e) => setSelectedAgentId(e.target.value)}
-                        sx={{ mb: 3 }}>
+                    <TextField select fullWidth value={selectedAgentId}
+                      onChange={(e) => setSelectedAgentId(e.target.value)}
+                      sx={{ mb: 3 }}>
                       {agents.length === 0
                         ? <MenuItem disabled value="">No agents found in this project</MenuItem>
                         : agents.map((a) => (
@@ -250,27 +286,39 @@ export default function Account(props: { disableCustomTheme?: boolean }) {
                             {selectedAgent.agent_keys.map((key) => (
                               <Box key={key.id} sx={(theme) => ({
                                 display: "flex", alignItems: "center", justifyContent: "space-between",
-                                px: 2, py: 1.5, borderRadius: 2, border: "1px solid", borderColor: "divider",
-                                backgroundColor: theme.palette.mode === "dark" ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
+                                px: 2, py: 1.5, borderRadius: 2, border: "1px solid",
+                                borderColor: key.active ? "divider" : "error.main",
+                                backgroundColor: key.active
+                                  ? (theme.palette.mode === "dark" ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)")
+                                  : (theme.palette.mode === "dark" ? "rgba(255,0,0,0.05)" : "rgba(255,0,0,0.03)"),
                               })}>
                                 <Box>
                                   <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-                                    <KeyIcon fontSize="small" sx={{ color: "primary.main" }} />
+                                    <KeyIcon fontSize="small" sx={{ color: key.active ? "primary.main" : "error.main" }} />
                                     <Typography variant="body2" fontWeight={600} sx={{ fontFamily: "monospace" }}>
                                       {key.prefix}••••••••
                                     </Typography>
-                                    <Chip label={key.active ? "Active" : "Inactive"} color={key.active ? "success" : "default"} size="small" />
+                                    <Chip
+                                      label={key.active ? "Active" : "Inactive"}
+                                      color={key.active ? "success" : "error"}
+                                      size="small"
+                                    />
                                   </Box>
                                   <Typography variant="caption" color="text.secondary" sx={{ ml: 3.5 }}>
                                     Created: {formatDate(key.created_at)}
                                     {key.expires_at && `  ·  Expires: ${formatDate(key.expires_at)}`}
                                   </Typography>
                                 </Box>
-                                <Button variant="outlined" color="error" size="small"
-                                  startIcon={<BlockIcon fontSize="small" />}
-                                  disabled title="Revoke endpoint coming soon"
-                                  sx={{ ml: 2, whiteSpace: "nowrap" }}>
-                                  Revoke
+                                <Button
+                                  variant="outlined"
+                                  color="error"
+                                  size="small"
+                                  startIcon={revokingKeyId === key.id ? <CircularProgress size={14} color="error" /> : <BlockIcon fontSize="small" />}
+                                  disabled={!key.active || revokingKeyId === key.id}
+                                  onClick={() => handleRevoke(key.id)}
+                                  sx={{ ml: 2, whiteSpace: "nowrap" }}
+                                >
+                                  {revokingKeyId === key.id ? "Revoking..." : key.active ? "Revoke" : "Revoked"}
                                 </Button>
                               </Box>
                             ))}
