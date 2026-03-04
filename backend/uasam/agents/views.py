@@ -337,8 +337,8 @@ class AgentKeyCreateView(View):
             agent = Agent.objects.get(id=agent_id, project=project, is_active=True)
             
             with transaction.atomic():
-                # Revoke existing key
-                #AgentKey.objects.filter(agent=agent, active=True).update(active=False, revoked_at=timezone.now())
+                # revoke any earlier valid key for this agent before issuing a new one
+                AgentKey.objects.filter(agent=agent, active=True).update(active=False, revoked_at=timezone.now())
 
                 full_key, prefix = AgentKey.generate_key()
                 expires_at = timezone.now() + timezone.timedelta(days=30)
@@ -381,6 +381,44 @@ class AgentKeyCreateView(View):
                 "status_description": "server_error"
             }, status=500)
         
+
+
+@method_decorator(user_project_auth_required, name='dispatch')
+class AgentKeyRevokeView(View):
+    """
+    POST /api/agent/v1/agents/key/revoke/
+    Revokes an existing SDK key for the given agent. Only project admins can call it.
+
+    Body: { "agent_key_id": "<uuid>" }
+    """
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        project = request.project
+        privilege = request.privilege
+
+        if privilege != UserProjectMapping.PRIVILEGE_ADMIN:
+            return JsonResponse({"status":0,"status_description":"forbidden"}, status=403)
+
+        try:
+            body = json.loads(request.body or "{}")
+            key_id = body.get("agent_key_id")
+        except json.JSONDecodeError:
+            return JsonResponse({"status":0,"status_description":"invalid_json"}, status=400)
+
+        if not key_id:
+            return JsonResponse({"status":0,"status_description":"agent_key_id_required"}, status=400)
+
+        try:
+            agent_key = AgentKey.objects.get(id=key_id, agent__project=project, active=True)
+            agent_key.active = False
+            agent_key.revoked_at = timezone.now()
+            agent_key.save()
+            return JsonResponse({"status":1,"status_description":"agent_key_revoked","response":{"id":str(agent_key.id)}}, status=200)
+        except AgentKey.DoesNotExist:
+            return JsonResponse({"status":0,"status_description":"agent_key_not_found"}, status=404)
+        except Exception:
+            logger.exception("Agent key revoke failed")
+            return JsonResponse({"status":0,"status_description":"server_error"}, status=500)
 @method_decorator(agent_authenticator, name='dispatch')
 class AgentAuthVerifyView(View):
     """
