@@ -7,12 +7,14 @@ from .views import (
     AgentListView, 
     AgentSessionListView,
     AgentKeyCreateView,
+    AgentKeyRevokeView,
     AgentAuthVerifyView
 )
 
 urlpatterns = [
     path('v1/create/', csrf_exempt(AgentCreateView.as_view()), name='agent-create'),
     path('v1/agents/key/create/', csrf_exempt(AgentKeyCreateView.as_view()), name='agent-key-create'), 
+    path('v1/agents/key/revoke/', csrf_exempt(AgentKeyRevokeView.as_view()), name='agent-key-revoke'),
     path('v1/session/create/', csrf_exempt(CreateAgentSessionViewV1.as_view()), name='agent-session-create'),
     path('v1/list/', AgentListView.as_view(), name='agent-list'),
     path('v1/sessions/list/', AgentSessionListView.as_view(), name='agent-session-list'),
