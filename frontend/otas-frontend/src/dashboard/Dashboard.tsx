@@ -34,6 +34,9 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   const { project_id } = useParams();
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
+  const [agents, setAgents] = useState<any[]>([]);
+  const [agentsLoading, setAgentsLoading] = useState(false);
+
 
   const [selectedPage, setSelectedPage] = useState<"home" | "analytics">("home");
 
@@ -97,6 +100,66 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
+  useEffect(() => {
+    if (!accessToken || !project_id) return;
+
+    const fetchAgents = async () => {
+      setAgentsLoading(true);
+      try {
+        const res = await fetch(
+          "http://localhost:8000/api/agent/v1/list/",
+          {
+            headers: {
+              "X-OTAS-USER-TOKEN": accessToken,
+              "X-OTAS-PROJECT-ID": project_id,
+            },
+          },
+        );
+
+        const result = await res.json();
+
+        if (result.status === 1) {
+          setAgents(result.response.agents);
+        } else {
+          setAgents([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch agents", err);
+        setAgents([]);
+      } finally {
+        setAgentsLoading(false);
+      }
+    };
+
+    fetchAgents();
+  }, [project_id, accessToken]);
+
+  const refreshAgents = async () => {
+    if (!accessToken || !project_id) return;
+
+    try {
+      const res = await fetch(
+        "http://localhost:8000/api/agent/v1/list/",
+        {
+          headers: {
+            "X-OTAS-USER-TOKEN": accessToken,
+            "X-OTAS-PROJECT-ID": project_id,
+          },
+        },
+      );
+
+      const result = await res.json();
+
+      if (result.status === 1) {
+        
+        setAgents(result.response.agents);
+      }
+    } catch (err) {
+      console.error("Failed to refresh agents", err);
+    }
+  };
+
+
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
@@ -142,10 +205,15 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
             {/* Only change: pass project_id to Header */}
             <Header projectId={project_id ?? ""} />
             {selectedPage === "home" && (
-              <MainGrid projectId={project_id} projectDomain={currentProject?.domain} />
+              <MainGrid
+                projectId={project_id}
+                projectDomain={currentProject?.domain}
+                agents={agents}
+                agentsLoading={agentsLoading}
+                refreshAgents={refreshAgents} />
             )}
             {selectedPage === "analytics" && (
-              <Analytics projectId={project_id} />
+              <Analytics projectId={project_id} agents={agents}  />
             )}
           </Stack>
         </Box>
