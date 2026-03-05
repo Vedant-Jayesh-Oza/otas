@@ -10,8 +10,10 @@ import { useSearchParams } from "react-router-dom";
 
 export default function Analytics({
   projectId,
+  agents,
 }: {
   projectId: string | undefined;
+  agents: any[];
 }) {
   const { user, accessToken } = useAuth();
   const navigate = useNavigate();
