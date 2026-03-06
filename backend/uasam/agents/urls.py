@@ -8,7 +8,8 @@ from .views import (
     AgentSessionListView,
     AgentKeyCreateView,
     AgentKeyRevokeView,
-    AgentAuthVerifyView
+    AgentAuthVerifyView,
+    AgentUserAuthenticate
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
     path('v1/sessions/list/', AgentSessionListView.as_view(), name='agent-session-list'),
     path('v1/auth/verify/', csrf_exempt(AgentAuthVerifyView.as_view()), name='agent-auth-verify'),
     path('v1/list/', csrf_exempt(AgentListView.as_view()), name='agent-list'),
+    path('v1/user/authenticate/', csrf_exempt(AgentUserAuthenticate.as_view()), name='agent-user-authenticate'),
 ]

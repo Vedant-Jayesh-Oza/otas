@@ -12,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 
+
 from decorators import agent_authenticator, user_project_auth_required
 from users.constants import JWT_SECRET
 from .models import AgentSession, Agent, AgentKey
@@ -419,6 +420,8 @@ class AgentKeyRevokeView(View):
         except Exception:
             logger.exception("Agent key revoke failed")
             return JsonResponse({"status":0,"status_description":"server_error"}, status=500)
+        
+        
 @method_decorator(agent_authenticator, name='dispatch')
 class AgentAuthVerifyView(View):
     """
@@ -459,3 +462,45 @@ class AgentAuthVerifyView(View):
                 "status": 0,
                 "status_description": "verification_failed"
             }, status=500)
+
+
+@method_decorator(user_project_auth_required, name='dispatch')
+class AgentUserAuthenticate(View):
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        project = request.project
+        try:
+            agent_id = request.headers.get("X-OTAS-AGENT-ID")
+
+            if not agent_id:
+                return JsonResponse(
+                    {"status": 0, "status_description": "missing_agent_id"},
+                    status=400,
+                )
+
+            # Check agent belongs to the project
+            try:
+                agent = Agent.objects.get(id=agent_id, project=project, is_active=True)
+            except Agent.DoesNotExist:
+                return JsonResponse(
+                    {"status": 0, "status_description": "agent_not_found"},
+                    status=404,
+                )
+
+            return JsonResponse(
+                {
+                    "status": 1,
+                    "status_description": "authenticated",
+                    "agent": {
+                        "id": str(agent.id),
+                        "name": agent.name,
+                        "project_id": str(project.id),
+                    },
+                },
+                status=200,
+            )
+
+        except Exception:
+            logger.exception("Agent authenticate failed")
+            return JsonResponse({"status": 0, "status_description": "server_error"}, status=500)
