@@ -18,7 +18,11 @@ interface OptionsMenuProps {
   projectId: string;
 }
 
-export default function OptionsMenu({ anchorEl, onClose, projectId }: OptionsMenuProps) {
+export default function OptionsMenu({
+  anchorEl,
+  onClose,
+  projectId,
+}: OptionsMenuProps) {
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
   const { clearAuth } = useAuth();
@@ -39,19 +43,30 @@ export default function OptionsMenu({ anchorEl, onClose, projectId }: OptionsMen
         [`& .${dividerClasses.root}`]: { margin: "4px -4px" },
       }}
     >
-      <MenuItem onClick={() => { navigate("/profile"); onClose(); }}>Profile</MenuItem>
-      <MenuItem onClick={() => {
-        const dest = projectId ? `/account?projectId=${projectId}` : "/account";
-        navigate(dest);
-        onClose();
-      }}>My Account</MenuItem>
+      <MenuItem
+        onClick={() => {
+          const dest = projectId
+            ? `/account?projectId=${projectId}`
+            : "/account";
+          navigate(dest);
+          onClose();
+        }}
+      >
+        My Account
+      </MenuItem>
       <Divider />
       <MenuItem
-        onClick={() => { clearAuth(); navigate("/"); onClose(); }}
+        onClick={() => {
+          clearAuth();
+          navigate("/");
+          onClose();
+        }}
         sx={{ [`& .${listItemIconClasses.root}`]: { ml: "auto", minWidth: 0 } }}
       >
         <ListItemText>Logout</ListItemText>
-        <ListItemIcon><LogoutRoundedIcon fontSize="small" /></ListItemIcon>
+        <ListItemIcon>
+          <LogoutRoundedIcon fontSize="small" />
+        </ListItemIcon>
       </MenuItem>
     </Menu>
   );

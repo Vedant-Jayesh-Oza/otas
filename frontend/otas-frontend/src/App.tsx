@@ -18,27 +18,141 @@ import ResetPassword from "./reset-password/resetPassword";
 import "./App.css";
 import "highlight.js/styles/github-dark.css";
 import Account from "./account/account";
+import CreateProject from "./project/CreateProject";
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<PublicRoute><HomePage /></PublicRoute>} />
-          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-          <Route path="/signup" element={<PublicRoute><SignUp /></PublicRoute>} />
-          <Route path="/blog" element={<PublicRoute><Blog /></PublicRoute>} />
-          <Route path="/company" element={<PublicRoute><CompanyPage /></PublicRoute>} />
-          <Route path="/contact" element={<PublicRoute><ContactPage /></PublicRoute>} />
-          <Route path="/demo" element={<PublicRoute><DemoPage /></PublicRoute>} />
-          <Route path="/features" element={<PublicRoute><FeaturesPage /></PublicRoute>} />
-          <Route path="/pricing" element={<PublicRoute><PricingPage /></PublicRoute>} />
-          <Route path="/privacy" element={<PublicRoute><PrivacyPage /></PublicRoute>} />
-          <Route path="/terms" element={<PublicRoute><TermsPage /></PublicRoute>} />
-          <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/dashboard/:project_id" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
+          <Route
+            path="/"
+            element={
+              <PublicRoute>
+                <HomePage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <PublicRoute>
+                <SignUp />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/blog"
+            element={
+              <PublicRoute>
+                <Blog />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/company"
+            element={
+              <PublicRoute>
+                <CompanyPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <PublicRoute>
+                <ContactPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/demo"
+            element={
+              <PublicRoute>
+                <DemoPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/features"
+            element={
+              <PublicRoute>
+                <FeaturesPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/pricing"
+            element={
+              <PublicRoute>
+                <PricingPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/privacy"
+            element={
+              <PublicRoute>
+                <PrivacyPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/terms"
+            element={
+              <PublicRoute>
+                <TermsPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <PublicRoute>
+                <ResetPassword />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/:project_id"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/projects/create"
+            element={
+              <ProtectedRoute>
+                <CreateProject />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

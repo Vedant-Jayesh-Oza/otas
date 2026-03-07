@@ -37,8 +37,9 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   const [agents, setAgents] = useState<any[]>([]);
   const [agentsLoading, setAgentsLoading] = useState(false);
 
-
-  const [selectedPage, setSelectedPage] = useState<"home" | "analytics">("home");
+  const [selectedPage, setSelectedPage] = useState<"home" | "analytics">(
+    "home",
+  );
 
   useEffect(() => {
     if (!accessToken) return;
@@ -74,19 +75,18 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
 
   useEffect(() => {
     if (projectsLoading) return;
-    if (project_id || projects.length === 0) return;
-    const firstProject = projects[0];
-    navigate(`/dashboard/${firstProject.id}/#home`, { replace: true });
-  }, [project_id, projects, projectsLoading, navigate]);
 
-  const currentProject = projects.find((p) => p.id === project_id);
-
-  useEffect(() => {
-    if (projectsLoading) return;
     if (projects.length === 0) {
       navigate("/projects/create/", { replace: true });
+      return;
     }
-  }, [projects, projectsLoading, navigate]);
+
+    if (!project_id) {
+      navigate(`/dashboard/${projects[0].id}/#home`, { replace: true });
+    }
+  }, [projectsLoading, projects, project_id, navigate]);
+
+  const currentProject = projects.find((p) => p.id === project_id);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -106,15 +106,12 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     const fetchAgents = async () => {
       setAgentsLoading(true);
       try {
-        const res = await fetch(
-          "http://localhost:8000/api/agent/v1/list/",
-          {
-            headers: {
-              "X-OTAS-USER-TOKEN": accessToken,
-              "X-OTAS-PROJECT-ID": project_id,
-            },
+        const res = await fetch("http://localhost:8000/api/agent/v1/list/", {
+          headers: {
+            "X-OTAS-USER-TOKEN": accessToken,
+            "X-OTAS-PROJECT-ID": project_id,
           },
-        );
+        });
 
         const result = await res.json();
 
@@ -138,27 +135,22 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     if (!accessToken || !project_id) return;
 
     try {
-      const res = await fetch(
-        "http://localhost:8000/api/agent/v1/list/",
-        {
-          headers: {
-            "X-OTAS-USER-TOKEN": accessToken,
-            "X-OTAS-PROJECT-ID": project_id,
-          },
+      const res = await fetch("http://localhost:8000/api/agent/v1/list/", {
+        headers: {
+          "X-OTAS-USER-TOKEN": accessToken,
+          "X-OTAS-PROJECT-ID": project_id,
         },
-      );
+      });
 
       const result = await res.json();
 
       if (result.status === 1) {
-        
         setAgents(result.response.agents);
       }
     } catch (err) {
       console.error("Failed to refresh agents", err);
     }
   };
-
 
   return (
     <AppTheme {...props}>
@@ -210,10 +202,11 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
                 projectDomain={currentProject?.domain}
                 agents={agents}
                 agentsLoading={agentsLoading}
-                refreshAgents={refreshAgents} />
+                refreshAgents={refreshAgents}
+              />
             )}
             {selectedPage === "analytics" && (
-              <Analytics projectId={project_id} agents={agents}  />
+              <Analytics projectId={project_id} agents={agents} />
             )}
           </Stack>
         </Box>
