@@ -21,8 +21,8 @@ interface Project {
   name: string;
   description: string | null;
   domain: string | null;
-  created_at: string; // ISO datetime string
-  updated_at: string; // ISO datetime string
+  created_at: string;
+  updated_at: string;
   is_active: boolean;
   created_by: string;
   privilege: number;
@@ -30,28 +30,27 @@ interface Project {
 
 export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
-  const { otasAccessToken } = useAuth();
+  const { accessToken } = useAuth();
   const { project_id } = useParams();
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectsLoading, setProjectsLoading] = useState(true);
+  const [agents, setAgents] = useState<any[]>([]);
+  const [agentsLoading, setAgentsLoading] = useState(false);
 
   const [selectedPage, setSelectedPage] = useState<"home" | "analytics">(
     "home",
   );
 
   useEffect(() => {
-    if (!otasAccessToken) return;
+    if (!accessToken) return;
 
     const fetchProjects = async () => {
       setProjectsLoading(true);
-
       try {
         const res = await fetch(PROJECT_LIST_ENDPOINT, {
-          headers: { "X-OTAS-USER-TOKEN": otasAccessToken },
+          headers: { "X-OTAS-USER-TOKEN": accessToken },
         });
-
         const result = await res.json();
-
         if (result.status === 1) {
           setProjects(result.response_body?.projects ?? []);
         } else {
@@ -66,7 +65,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
     };
 
     fetchProjects();
-  }, [otasAccessToken]);
+  }, [accessToken]);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -76,21 +75,18 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
 
   useEffect(() => {
     if (projectsLoading) return;
-    if (project_id || projects.length === 0) return;
 
-    const firstProject = projects[0];
-    navigate(`/dashboard/${firstProject.id}/#home`, { replace: true });
-  }, [project_id, projects, projectsLoading, navigate]);
-
-  const currentProject = projects.find((p) => p.id === project_id);
-
-  useEffect(() => {
-    if (projectsLoading) return;
-    console.log("PROJECT LEGNTH", projects.length);
     if (projects.length === 0) {
       navigate("/projects/create/", { replace: true });
+      return;
     }
-  }, [projects, projectsLoading, navigate]);
+
+    if (!project_id) {
+      navigate(`/dashboard/${projects[0].id}/#home`, { replace: true });
+    }
+  }, [projectsLoading, projects, project_id, navigate]);
+
+  const currentProject = projects.find((p) => p.id === project_id);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -99,12 +95,62 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
         setSelectedPage(hash as typeof selectedPage);
       }
     };
-
-    handleHashChange(); // run once on mount
-
+    handleHashChange();
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
+
+  useEffect(() => {
+    if (!accessToken || !project_id) return;
+
+    const fetchAgents = async () => {
+      setAgentsLoading(true);
+      try {
+        const res = await fetch("http://localhost:8000/api/agent/v1/list/", {
+          headers: {
+            "X-OTAS-USER-TOKEN": accessToken,
+            "X-OTAS-PROJECT-ID": project_id,
+          },
+        });
+
+        const result = await res.json();
+
+        if (result.status === 1) {
+          setAgents(result.response.agents);
+        } else {
+          setAgents([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch agents", err);
+        setAgents([]);
+      } finally {
+        setAgentsLoading(false);
+      }
+    };
+
+    fetchAgents();
+  }, [project_id, accessToken]);
+
+  const refreshAgents = async () => {
+    if (!accessToken || !project_id) return;
+
+    try {
+      const res = await fetch("http://localhost:8000/api/agent/v1/list/", {
+        headers: {
+          "X-OTAS-USER-TOKEN": accessToken,
+          "X-OTAS-PROJECT-ID": project_id,
+        },
+      });
+
+      const result = await res.json();
+
+      if (result.status === 1) {
+        setAgents(result.response.agents);
+      }
+    } catch (err) {
+      console.error("Failed to refresh agents", err);
+    }
+  };
 
   return (
     <AppTheme {...props}>
@@ -148,16 +194,19 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
             spacing={2}
             sx={{ alignItems: "center", mx: 2, pb: 5, mt: { xs: 8, md: 0 } }}
           >
-            <Header />
+            {/* Only change: pass project_id to Header */}
+            <Header projectId={project_id ?? ""} />
             {selectedPage === "home" && (
               <MainGrid
                 projectId={project_id}
                 projectDomain={currentProject?.domain}
+                agents={agents}
+                agentsLoading={agentsLoading}
+                refreshAgents={refreshAgents}
               />
             )}
-
             {selectedPage === "analytics" && (
-              <Analytics projectId={project_id} />
+              <Analytics projectId={project_id} agents={agents} />
             )}
           </Stack>
         </Box>

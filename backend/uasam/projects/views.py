@@ -311,8 +311,120 @@ class BackendSDKKeyCreateView(View):
                 },
                 status=500
             )
-            
-            
+
+
+@method_decorator(user_project_auth_required, name='dispatch')
+class BackendSDKKeyRevokeView(View):
+    """
+    POST /api/project/v1/sdk/backend/key/revoke/
+
+    Revoke an existing backend SDK API key for a project.
+
+    Headers:
+    - X-OTAS-USER-TOKEN: User JWT token
+    - X-OTAS-PROJECT-ID: Project UUID
+
+    Body: { "sdk_key_id": "<uuid>" }
+    """
+
+    def post(self, request, *args, **kwargs):
+        project = request.project
+        privilege = request.privilege
+
+        if privilege != UserProjectMapping.PRIVILEGE_ADMIN:
+            return JsonResponse({
+                "status": 0,
+                "status_description": "forbidden"
+            }, status=403)
+
+        try:
+            body = json.loads(request.body or "{}")
+            sdk_key_id = body.get("sdk_key_id")
+        except json.JSONDecodeError:
+            return JsonResponse({
+                "status": 0,
+                "status_description": "invalid_json"
+            }, status=400)
+
+        if not sdk_key_id:
+            return JsonResponse({
+                "status": 0,
+                "status_description": "sdk_key_id_required"
+            }, status=400)
+
+        try:
+            api_key = BackendAPIKey.objects.get(id=sdk_key_id, project=project, active=True)
+            api_key.active = False
+            api_key.revoked_at = timezone.now()
+            api_key.save()
+
+            return JsonResponse({
+                "status": 1,
+                "status_description": "backend_sdk_key_revoked",
+                "response_body": {
+                    "id": str(api_key.id)
+                }
+            }, status=200)
+        except BackendAPIKey.DoesNotExist:
+            return JsonResponse({
+                "status": 0,
+                "status_description": "sdk_key_not_found"
+            }, status=404)
+        except Exception:
+            logger.exception("Failed to revoke SDK key")
+            return JsonResponse({
+                "status": 0,
+                "status_description": "sdk_key_revoke_failed"
+            }, status=500)
+
+
+@method_decorator(user_project_auth_required, name='dispatch')
+class BackendSDKKeyListView(View):
+    """
+    GET /api/project/v1/sdk/backend/key/list/
+
+    List backend SDK keys for the current project.
+    Headers: X-OTAS-USER-TOKEN, X-OTAS-PROJECT-ID.
+    Returns keys with id, prefix, name, created_at, expires_at, active, revoked_at (no raw key).
+    """
+
+    def get(self, request, *args, **kwargs):
+        project = request.project
+        privilege = request.privilege
+
+        if privilege != UserProjectMapping.PRIVILEGE_ADMIN:
+            return JsonResponse({
+                "status": 0,
+                "status_description": "forbidden"
+            }, status=403)
+
+        try:
+            keys = BackendAPIKey.objects.filter(project=project).order_by("-created_at")
+            keys_data = [
+                {
+                    "id": str(k.id),
+                    "prefix": k.prefix,
+                    "name": k.name,
+                    "created_at": k.created_at.isoformat(),
+                    "expires_at": k.expires_at.isoformat() if k.expires_at else None,
+                    "active": k.active,
+                    "revoked_at": k.revoked_at.isoformat() if k.revoked_at else None,
+                }
+                for k in keys
+            ]
+            return JsonResponse({
+                "status": 1,
+                "status_description": "backend_sdk_keys_listed",
+                "response_body": {"keys": keys_data}
+            }, status=200)
+        except Exception:
+            logger.exception("Failed to list backend SDK keys")
+            return JsonResponse({
+                "status": 0,
+                "status_description": "sdk_key_list_failed"
+            }, status=500)
+
+
 @method_decorator(sdk_authenticator, name='dispatch')
 class BackendSDKAuthenticateView(View):
     def post(self, request, *args, **kwargs):

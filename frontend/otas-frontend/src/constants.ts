@@ -29,12 +29,22 @@ export const USER_PYTHON_ALGORITHM_RUNS_V1_ENDPOINT =
   GOVERNOR_ENDPOINT + "/v1/user/algorithm/runs/";
 
 export const PASSWORD_UPDATE_V1_ENDPOINT =
-  UASAM_ENDPOINT + "/api/user/v1/reset-password/update/";
+  UASAM_ENDPOINT + "/v1/user/reset-password/update/";
 
+// Project and Agent Endpoints
+export const PROJECT_LIST_V1_ENDPOINT =
+  UASAM_ENDPOINT + "/api/project/v1/list/";
+export const AGENT_KEY_REVOKE_ENDPOINT =
+  UASAM_ENDPOINT + "/api/agent/v1/agents/key/revoke/";
+export const PROJECT_LIST_ENDPOINT = PROJECT_LIST_V1_ENDPOINT;
 export const CREATE_PROJECT_ENDPOINT =
   UASAM_ENDPOINT + "/api/project/v1/create/";
-
-export const PROJECT_LIST_ENDPOINT = UASAM_ENDPOINT + "/api/project/v1/list/";
-
+export const AGENT_LIST_V1_ENDPOINT = UASAM_ENDPOINT + "/api/agent/v1/list/";
 export const BACKEND_SDK_KEY_CREATE_ENDPOINT =
   UASAM_ENDPOINT + "/api/project/v1/sdk/backend/key/create/";
+export const BACKEND_SDK_KEY_LIST_ENDPOINT =
+  UASAM_ENDPOINT + "/api/project/v1/sdk/backend/key/list/";
+export const BACKEND_SDK_KEY_REVOKE_ENDPOINT =
+  UASAM_ENDPOINT + "/api/project/v1/sdk/backend/key/revoke/";
+export const AGENT_SESSION_LIST_V1_ENDPOINT = 
+  UASAM_ENDPOINT + "/api/agent/v1/sessions/list/";

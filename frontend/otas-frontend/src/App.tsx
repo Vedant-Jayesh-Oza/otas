@@ -8,7 +8,6 @@ import PricingPage from "./home/PricingPage";
 import PrivacyPage from "./home/PrivacyPage";
 import TermsPage from "./home/TermsPage";
 import ContactPage from "./home/ContactPage";
-
 import Login from "./login/login";
 import SignUp from "./signup/signup";
 import Dashboard from "./dashboard/Dashboard";
@@ -16,18 +15,16 @@ import { AuthProvider } from "./AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import ResetPassword from "./reset-password/resetPassword";
-import CreateProject from "./project/CreateProject";
-
 import "./App.css";
 import "highlight.js/styles/github-dark.css";
 import Account from "./account/account";
+import CreateProject from "./project/CreateProject";
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          {/* Public routes — redirect to dashboard if user is already logged in */}
           <Route
             path="/"
             element={
@@ -124,8 +121,6 @@ function App() {
               </PublicRoute>
             }
           />
-
-          {/* Protected routes — only for authenticated users */}
           <Route
             path="/dashboard"
             element={
@@ -134,9 +129,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
-            path="/dashboard/:project_id/*"
+            path="/dashboard/:project_id"
             element={
               <ProtectedRoute>
                 <Dashboard />
@@ -151,7 +145,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/projects/create"
             element={
@@ -160,8 +153,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-          {/* Catch-all fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

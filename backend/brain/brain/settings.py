@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'corsheaders',
     'django.contrib.staticfiles',
     'events',
 ]
@@ -42,6 +43,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -145,3 +147,23 @@ ALLOWED_HOSTS = ['*']
 
 # JWT
 JWT_SECRET = os.getenv('JWT_SECRET', 'some-jwt-secret')
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'X-OTAS-USER-TOKEN',
+    'X-OTAS-AGENT-KEY',
+    'X-OTAS-AGENT-SESSION-KEY',
+    'X-OTAS-SDK-KEY',
+    'X-OTAS-AGENT-ID',
+    'X-OTAS-PROJECT-ID'
+]

@@ -13,21 +13,31 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Tooltip from "@mui/material/Tooltip";
 import CreateAgent from "./CreateAgent";
 import CreateBackendSdkKey from "./CreateBackendSdkKey";
+import { log } from "console";
+import AgentDetails from "./AgentDetailsList";
+import AgentDetailsList from "./AgentDetailsList";
 
 export default function MainGrid({
   projectId,
   projectDomain,
+  agents,
+  agentsLoading,
+  refreshAgents,
 }: {
   projectId: string | undefined;
   projectDomain: string | null | undefined;
+  agents: any[];
+  agentsLoading: boolean;
+  refreshAgents: () => void;
 }) {
-  const { user, otasAccessToken } = useAuth();
+  const { user, accessToken } = useAuth();
   const [rows, setRows] = useState<Algorithm[]>([]);
   const navigate = useNavigate();
-
+  
+  
   const { mode, systemMode } = useColorScheme();
   const resolvedMode = mode === "system" ? systemMode : mode;
-
+  
   return (
     <Box sx={{ width: "100%", maxWidth: { sm: "100%", md: "1700px" } }}>
       {/* Create Agent Section */}
@@ -40,26 +50,40 @@ export default function MainGrid({
             <CreateAgent
               projectId={projectId}
               projectDomain={projectDomain}
-              otasAccessToken={otasAccessToken || undefined}
-              onAgentCreated={(agent) => {
-                console.log("Agent created:", agent);
+              accessToken={accessToken || undefined}
+              onAgentCreated={() => {
+                refreshAgents();
                 // optionally refresh agent list here
               }}
             />
             <CreateBackendSdkKey
               projectId={projectId}
-              otasAccessToken={otasAccessToken || undefined}
+              accessToken={accessToken || undefined}
             />
           </Box>
         </Box>
       </Grid>
 
       {/* Agent Details Section */}
-      <Grid container spacing={2} columns={12} sx={{ mt: 2 }}>
+      <Grid container spacing={2} columns={12} sx={{ width: "100%", mt: 2, maxWidth: { sm: "100%", md: "1700px" } }}>
         <Box sx={{ width: "100%", maxWidth: "100%" }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Agent Details
-          </Typography>
+          
+          {
+            agentsLoading ? (
+              <Typography variant="body1">Loading agents...</Typography>
+            ) : agents.length === 0 ? (
+              <Typography variant="body1">No agents found. Create one to get started!</Typography>
+            ) : (
+                  <AgentDetailsList
+                    agents={agents}
+                    projectId={projectId}
+                    accessToken={accessToken || undefined}
+                    refreshAgents={refreshAgents}
+                  />
+
+            )
+          }
+
         </Box>
       </Grid>
     </Box>
