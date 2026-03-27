@@ -15,13 +15,13 @@ export default function MenuContent({
   selectedPage,
   onSelectPage,
 }: {
-  selectedPage: "home" | "analytics" | "timeline";
-  onSelectPage: (page: "home" | "analytics" | "timeline") => void;
+  selectedPage: "home" | "analytics" | "logs";
+  onSelectPage: (page: "home" | "analytics" | "logs") => void;
 }) {
   const mainListItems = [
     { text: "Home", icon: <HomeRoundedIcon />, key: "home" },
     { text: "Analytics", icon: <AnalyticsRoundedIcon />, key: "analytics" },
-    { text: "Session timeline", icon: <TimelineIcon />, key: "timeline" },
+    { text: "Session Logs", icon: <TimelineIcon />, key: "logs" },
   ];
 
   return (

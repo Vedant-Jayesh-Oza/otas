@@ -12,7 +12,7 @@ import MainGrid from "./components/MainGrid";
 import SideMenu from "./components/SideMenu";
 import AppTheme from "../shared-ui-theme/AppTheme";
 import Analytics from "./components/Analytics";
-import SessionTimeline from "./components/SessionTimeline";
+import SessionTimeline from "./components/SessionLogs";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useAuth } from "../AuthContext";
 import { AGENT_LIST_V1_ENDPOINT, PROJECT_LIST_ENDPOINT } from "../constants";
@@ -39,7 +39,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
   const [agentsLoading, setAgentsLoading] = useState(false);
 
   const [selectedPage, setSelectedPage] = useState<
-    "home" | "analytics" | "timeline"
+    "home" | "analytics" | "logs"
   >("home");
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
       if (
         hash === "analytics" ||
         hash === "home" ||
-        hash === "timeline"
+        hash === "logs"
       ) {
         setSelectedPage(hash as typeof selectedPage);
       }
@@ -213,7 +213,7 @@ export default function Dashboard(props: { disableCustomTheme?: boolean }) {
             {selectedPage === "analytics" && (
               <Analytics projectId={project_id} agents={agents} />
             )}
-            {selectedPage === "timeline" && (
+            {selectedPage === "logs" && (
               <SessionTimeline projectId={project_id} agents={agents} />
             )}
           </Stack>
