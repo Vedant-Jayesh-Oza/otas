@@ -41,8 +41,8 @@ export default function SideMenu({
   projects,
   currentProject,
 }: {
-  selectedPage: "home" | "analytics";
-  onSelectPage: (page: "home" | "analytics") => void;
+  selectedPage: "home" | "analytics" | "timeline";
+  onSelectPage: (page: "home" | "analytics" | "timeline") => void;
   projects: Project[];
   currentProject?: Project;
 }) {
