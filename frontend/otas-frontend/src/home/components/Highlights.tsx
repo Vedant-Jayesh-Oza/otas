@@ -1,47 +1,48 @@
-import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
-import ConstructionRoundedIcon from "@mui/icons-material/ConstructionRounded";
+import { Box, Card, Container, Stack, Typography } from "@mui/material";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
-import PsychologyIcon from "@mui/icons-material/Psychology";
-import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
+import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
+import BugReportRoundedIcon from "@mui/icons-material/BugReportRounded";
+import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
+import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import { useColorScheme } from "@mui/material/styles";
-import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
-import TerminalIcon from "@mui/icons-material/Terminal";
 
 const items = [
   {
-    icon: <ConstructionRoundedIcon fontSize="large" />,
-    title: "Automated deployments",
+    icon: <DescriptionRoundedIcon fontSize="large" />,
+    title: "One manifest file",
     description:
-      "Write your algorithm on our IDE and Otas takes care of all the deployments automatically on the cloud.",
-  },
-  {
-    icon: <PsychologyIcon fontSize="large" />,
-    title: "Otas AI",
-    description:
-      "Let Otas AI help you write your algorithms by just describing it in words.",
-  },
-  {
-    icon: <ThumbUpAltRoundedIcon fontSize="large" />,
-    title: "Great user experience",
-    description:
-      "Find all that you need for backtesting, paper trading and live trading on one platform.",
-  },
-  {
-    icon: <TerminalIcon fontSize="large" />,
-    title: "Cloud IDE",
-    description:
-      "Write, run and test your python code on the browser with ease. No installation required.",
-  },
-  {
-    icon: <AssuredWorkloadIcon fontSize="large" />,
-    title: "Broker support",
-    description: "Connect with your preffered broker for your trades.",
+      "Drop otas_agent_manifest.md into your agent. No SDK wiring, no config overhead. That's the entire integration.",
   },
   {
     icon: <QueryStatsRoundedIcon fontSize="large" />,
-    title: "Gain deeper insights",
+    title: "Automatic API capture",
     description:
-      "Backtest and Paper trade your algorithm to battle test it before deploying it on Live trades",
+      "Every API endpoint your agent hits is captured and logged automatically — zero instrumentation required.",
+  },
+  {
+    icon: <AccountTreeRoundedIcon fontSize="large" />,
+    title: "Session DAG replay",
+    description:
+      "Replay any agent session as a step-by-step directed graph. See exactly what actions fired and in what order.",
+  },
+  {
+    icon: <BugReportRoundedIcon fontSize="large" />,
+    title: "Error rate tracking",
+    description:
+      "Monitor per-day error rates over a rolling 7-day window. Non-null error fields are counted and surfaced automatically.",
+  },
+  {
+    icon: <SpeedRoundedIcon fontSize="large" />,
+    title: "Latency distribution",
+    description:
+      "Quartile graphs across all sessions show you where your agent is slow before it becomes a production problem.",
+  },
+  {
+    icon: <VpnKeyRoundedIcon fontSize="large" />,
+    title: "Agent key management",
+    description:
+      "Create, rotate, and revoke agent SDK keys from the dashboard. Each agent and project is fully isolated.",
   },
 ];
 
@@ -77,21 +78,21 @@ export default function Highlights() {
           }}
         >
           <Typography component="h2" variant="h4" gutterBottom>
-            Highlights
+            Everything you need to trust your agents in production
           </Typography>
           <Typography
             variant="body1"
             sx={{ color: isDark ? "grey.400" : "grey.600" }}
           >
-            Discover what makes Otas the ultimate platform for algorithmic
-            trading for everyone.
+            OTAS gives engineering teams full visibility into how their AI
+            agents behave — without changing how agents are built.
           </Typography>
         </Box>
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)", // 3 columns always
-            gap: 2, // spacing between cards
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: 2,
           }}
         >
           {items.map((item, index) => (

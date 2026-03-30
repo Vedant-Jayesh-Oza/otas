@@ -131,8 +131,8 @@ export default function Hero() {
           <img
             src={
               resolvedMode == "dark"
-                ? "/images/dark-code.png"
-                : "/images/light-code.png"
+                ? "/images/home-dark.png"
+                : "/images/home-light.png"
             }
             alt="Dashboard Screenshot"
             style={{

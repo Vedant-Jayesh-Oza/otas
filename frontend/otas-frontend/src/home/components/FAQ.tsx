@@ -8,6 +8,50 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
+const faqs = [
+  {
+    id: "panel1",
+    question: "How do I integrate OTAS into my agent?",
+    answer:
+      "Add the otas_agent_manifest.md file to your agent — that's it. OTAS will automatically begin capturing every API call your agent makes. No SDK wiring, no code changes to your agent logic required.",
+  },
+  {
+    id: "panel2",
+    question: "What exactly gets captured?",
+    answer:
+      "OTAS captures every API endpoint your agent hits, along with timestamps, latency, session context, and any error fields. You can replay any session as a step-by-step DAG and view aggregate analytics across all sessions.",
+  },
+  {
+    id: "panel3",
+    question: "Does OTAS work with any agent framework?",
+    answer:
+      "Yes. OTAS is framework-agnostic. As long as your agent is making HTTP API calls, OTAS will capture them. It works with any Python-based agent or backend service out of the box.",
+  },
+  {
+    id: "panel4",
+    question: "Is my agent's data kept private?",
+    answer:
+      "Yes. Your agent logs and session data are scoped to your project and are never shared or used to train any models. Each project and agent is fully isolated with its own SDK keys.",
+  },
+  {
+    id: "panel5",
+    question: "How do agent keys work?",
+    answer:
+      "When you create an agent in the dashboard, OTAS generates a unique SDK key for it. You can rotate or revoke keys at any time from the Accounts page. Keys are scoped per agent, so a compromised key never affects other agents or projects.",
+  },
+  {
+    id: "panel6",
+    question: "How do I contact support?",
+    answer: (
+      <>
+        Reach our team at{" "}
+        <Link href="mailto:support@otas.com">support@otas.com</Link> and we'll
+        get back to you promptly.
+      </>
+    ),
+  },
+];
+
 export default function FAQ() {
   const [expanded, setExpanded] = React.useState<string[]>([]);
 
@@ -45,109 +89,32 @@ export default function FAQ() {
         Frequently asked questions
       </Typography>
       <Box sx={{ width: "100%" }}>
-        <Accordion
-          expanded={expanded.includes("panel2")}
-          onChange={handleChange("panel2")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2d-content"
-            id="panel2d-header"
+        {faqs.map(({ id, question, answer }) => (
+          <Accordion
+            key={id}
+            expanded={expanded.includes(id)}
+            onChange={handleChange(id)}
           >
-            <Typography component="span" variant="subtitle2">
-              Do I need to have any prior coding experience or learn any
-              proprietary language to use Otas?
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography
-              variant="body2"
-              gutterBottom
-              sx={{ maxWidth: { sm: "100%", md: "70%" } }}
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={`${id}-content`}
+              id={`${id}-header`}
             >
-              No! You do not need any prior experience with code or learn any
-              proprietary language to use Otas. Otas AI will help you convert
-              your ideas into algorithms in Python and you can always edit it
-              however you'd like.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded.includes("panel3")}
-          onChange={handleChange("panel3")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3d-content"
-            id="panel3d-header"
-          >
-            <Typography component="span" variant="subtitle2">
-              Do you train your AI on my algorithm?
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography
-              variant="body2"
-              gutterBottom
-              sx={{ maxWidth: { sm: "100%", md: "70%" } }}
-            >
-              No! We do not train our LLM on any of your algorithms. We will
-              only use your chats to fine-tune and make your experience better
-              when talking to Otas.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded.includes("panel4")}
-          onChange={handleChange("panel4")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel4d-content"
-            id="panel4d-header"
-          >
-            <Typography component="span" variant="subtitle2">
-              How safe is it for me to connect my broker to Otas?
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography
-              variant="body2"
-              gutterBottom
-              sx={{ maxWidth: { sm: "100%", md: "70%" } }}
-            >
-              We will not have access to your broker account and it will be
-              authenticated only from you when connecting to the broker. We also
-              encrypt all PII data to ensure at most privacy and security for
-              you and your account.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          expanded={expanded.includes("panel1")}
-          onChange={handleChange("panel1")}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1d-content"
-            id="panel1d-header"
-          >
-            <Typography component="span" variant="subtitle2">
-              How do I contact customer support if I have a question or issue?
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography
-              variant="body2"
-              gutterBottom
-              sx={{ maxWidth: { sm: "100%", md: "70%" } }}
-            >
-              You can reach our customer support team by emailing&nbsp;
-              <Link href="mailto:support@otas.com">support@otas.com</Link>.
-              We&apos;re here to assist you promptly.
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
+              <Typography component="span" variant="subtitle2">
+                {question}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography
+                variant="body2"
+                gutterBottom
+                sx={{ maxWidth: { sm: "100%", md: "70%" } }}
+              >
+                {answer}
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        ))}
       </Box>
     </Container>
   );

@@ -7,47 +7,47 @@ import MuiChip from "@mui/material/Chip";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-import CodeIcon from "@mui/icons-material/Code";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import ViewQuiltRoundedIcon from "@mui/icons-material/ViewQuiltRounded";
+import TerminalIcon from "@mui/icons-material/Terminal";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import BugReportIcon from "@mui/icons-material/BugReport";
 import { useColorScheme } from "@mui/material/styles";
 
 const items = [
   {
-    icon: <ViewQuiltRoundedIcon />,
-    title: "Dashboard",
+    icon: <TerminalIcon />,
+    title: "One-File Integration",
     description:
-      "A comprehensive dashboard that helps you track your algorithms, backtests and portfolio.",
+      "Drop a single manifest file into your agent. That's the entire setup.",
     points: [
-      "Track your strategies, performance metrics, and open positions in one unified view.",
-      "Get a high level overview of all your backtests and trading activity.",
-      "Monitor your portfolio and algorithmic trading sessions in real time.",
+      "Add otas_agent_manifest.md to your agent — no SDK wiring, no config files.",
+      "Works with any Python-based agent or backend framework out of the box.",
+      "Generate and revoke agent keys from the dashboard in seconds.",
+    ],
+    imageLight: `url("/images/manifest-light.png")`,
+    imageDark: `url("/images/manifest-dark.png")`,
+  },
+  {
+    icon: <TimelineIcon />,
+    title: "Full API Observability",
+    description:
+      "Every API call your agent makes is captured, timestamped, and surfaced automatically.",
+    points: [
+      "See every path your agent hits across all sessions in a single bar graph view.",
+      "Inspect individual sessions as a step-by-step DAG — each action as a node.",
+      "Track latency distributions, log counts per day, and session frequency over time.",
     ],
     imageLight: `url("/images/light-dashboard.png")`,
     imageDark: `url("/images/dark-dashboard.png")`,
   },
   {
-    icon: <CodeIcon />,
-    title: "Cloud Coding Environment",
+    icon: <BugReportIcon />,
+    title: "Error & Anomaly Tracking",
     description:
-      "A cloud environment for you to code in Python with all the features you'd expect from an IDE without having to download a thing.",
+      "Catch failures before your users do. Monitor error rates and drill into exactly where things broke.",
     points: [
-      "Code in Python directly in the browser. No installation required.",
-      "Use Otas AI to generate code by describing your strategy in plain English.",
-      "Review, edit, and fully customize the generated code with a full featured IDE.",
-    ],
-    imageLight: `url("/images/light-code.png")`,
-    imageDark: `url("/images/dark-code.png")`,
-  },
-  {
-    icon: <AccountBalanceIcon />,
-    title: "Trading & Execution",
-    description:
-      "Backtest, simulate, and execute your strategies seamlessly using your preferred broker.",
-    points: [
-      "Run historical backtests with real market data to validate your strategy.",
-      "Simulate trades with paper trading in live market conditions without any risk.",
-      "Connect to supported brokers and deploy your algorithms live from Otas.",
+      "Per-day error rate graph over the last 7 days — non-null error fields counted automatically.",
+      "Expand any graph into a full-screen view for deeper inspection.",
+      "Agent log API lets your agent emit structured logs tied to its session.",
     ],
     imageLight: `url("/images/light-dashboard.png")`,
     imageDark: `url("/images/dark-dashboard.png")`,
@@ -118,7 +118,7 @@ export function MobileLayout({
         <Box
           sx={(theme) => ({
             mb: 2,
-            display: { xs: "block", md: "none" }, // ✅ FIXED LINE
+            display: { xs: "block", md: "none" },
             backgroundSize: "contain",
             backgroundPosition: "center",
             minHeight: 280,
@@ -194,11 +194,12 @@ export default function Features() {
           gutterBottom
           sx={{ color: "text.primary" }}
         >
-          Product Features
+          How It Works
         </Typography>
         <Typography variant="body1" sx={{ color: "text.secondary" }}>
-          Explore the key features of Otas that streamline algorithmic trading,
-          from strategy creation to live execution.
+          OTAS gives you complete visibility into your AI agents — what APIs
+          they call, how they behave across sessions, and where they fail. Setup
+          takes one file. Everything else is automatic.
         </Typography>
       </Box>
 
@@ -285,7 +286,6 @@ export default function Features() {
               width: "100%",
             }}
           >
-            {/* Mobile layout */}
             <MobileLayout
               selectedItemIndex={selectedItemIndex}
               handleItemClick={handleItemClick}
@@ -293,6 +293,7 @@ export default function Features() {
             />
           </Box>
         </div>
+
         {/* Image Preview Card */}
         <Box
           sx={{

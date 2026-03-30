@@ -1,48 +1,35 @@
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import PsychologyIcon from "@mui/icons-material/Psychology";
-import AssuredWorkloadIcon from "@mui/icons-material/AssuredWorkload";
-import TerminalIcon from "@mui/icons-material/Terminal";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import AccountTreeRoundedIcon from "@mui/icons-material/AccountTreeRounded";
 import QueryStatsRoundedIcon from "@mui/icons-material/QueryStatsRounded";
-import ThumbUpAltRoundedIcon from "@mui/icons-material/ThumbUpAltRounded";
-import ConstructionRoundedIcon from "@mui/icons-material/ConstructionRounded";
+import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 
 const items = [
   {
-    icon: <ConstructionRoundedIcon fontSize="large" />,
-    title: "Automated deployments",
+    icon: <DescriptionRoundedIcon fontSize="large" />,
+    title: "One manifest file to get started",
     description:
-      "Write your algorithm on our IDE and Otas takes care of all the deployments automatically on the cloud.",
-  },
-  {
-    icon: <PsychologyIcon fontSize="large" />,
-    title: "Otas AI",
-    description:
-      "Let Otas AI help you write your algorithms by just describing it in words.",
-  },
-  {
-    icon: <ThumbUpAltRoundedIcon fontSize="large" />,
-    title: "Great user experience",
-    description:
-      "Find all that you need for backtesting, paper trading and live trading on one platform.",
-  },
-  {
-    icon: <TerminalIcon fontSize="large" />,
-    title: "Cloud IDE",
-    description:
-      "Write, run and test your python code on the browser with ease. No installation required.",
-  },
-  {
-    icon: <AssuredWorkloadIcon fontSize="large" />,
-    title: "Broker support",
-    description: "Connect with your preffered broker for your trades.",
+      "Drop otas_agent_manifest.md into your agent and OTAS immediately starts capturing every API call it makes.",
   },
   {
     icon: <QueryStatsRoundedIcon fontSize="large" />,
-    title: "Gain deeper insights",
+    title: "Full session observability",
     description:
-      "Backtest and Paper trade your algorithm to battle test it before deploying it on Live trades",
+      "Track latency, error rates, and log counts across all your agent sessions — updated automatically.",
+  },
+  {
+    icon: <AccountTreeRoundedIcon fontSize="large" />,
+    title: "Session DAG replay",
+    description:
+      "Inspect any agent session as a step-by-step directed graph. See exactly what your agent did and when.",
+  },
+  {
+    icon: <VpnKeyRoundedIcon fontSize="large" />,
+    title: "Secure agent key management",
+    description:
+      "Generate, rotate, and revoke SDK keys per agent from the dashboard. Every project stays fully isolated.",
   },
 ];
 

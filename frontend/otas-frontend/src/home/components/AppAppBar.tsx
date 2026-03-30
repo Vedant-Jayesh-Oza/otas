@@ -31,12 +31,30 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   padding: "8px 12px",
 }));
 
+const navItems = [
+  { label: "Features", sectionId: "features" },
+  { label: "Highlights", sectionId: "highlights" },
+  { label: "FAQ", sectionId: "faq" },
+];
+
+function scrollToSection(sectionId: string) {
+  const el = document.getElementById(sectionId);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
 export default function AppAppBar() {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
+  };
+
+  const handleNavClick = (sectionId: string) => {
+    setOpen(false);
+    scrollToSection(sectionId);
   };
 
   return (
@@ -90,18 +108,20 @@ export default function AppAppBar() {
             </Typography>
             <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
 
+            {/* Desktop nav */}
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <MenuItem onClick={() => navigate("/features")}>
-                Features
-              </MenuItem>
-              <MenuItem onClick={() => navigate("/features#highlights")}>
-                Highlights
-              </MenuItem>
-              <MenuItem onClick={() => navigate("/pricing")}>Pricing</MenuItem>
-              <MenuItem onClick={() => navigate("/pricing#faqs")}>FAQ</MenuItem>
-              <MenuItem onClick={() => navigate("/blog")}>Blog</MenuItem>
+              {navItems.map(({ label, sectionId }) => (
+                <MenuItem
+                  key={sectionId}
+                  onClick={() => handleNavClick(sectionId)}
+                >
+                  {label}
+                </MenuItem>
+              ))}
             </Box>
           </Box>
+
+          {/* Desktop auth buttons */}
           <Box
             sx={{
               display: { xs: "none", md: "flex" },
@@ -127,6 +147,8 @@ export default function AppAppBar() {
             </Button>
             <ColorModeIconDropdown />
           </Box>
+
+          {/* Mobile */}
           <Box sx={{ display: { xs: "flex", md: "none" }, gap: 1 }}>
             <ColorModeIconDropdown size="medium" />
             <IconButton aria-label="Menu button" onClick={toggleDrawer(true)}>
@@ -143,22 +165,21 @@ export default function AppAppBar() {
               }}
             >
               <Box sx={{ p: 2, backgroundColor: "background.default" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                  }}
-                >
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                   <IconButton onClick={toggleDrawer(false)}>
                     <CloseRoundedIcon />
                   </IconButton>
                 </Box>
 
-                <MenuItem>Features</MenuItem>
-                <MenuItem>Highlights</MenuItem>
-                <MenuItem>Pricing</MenuItem>
-                <MenuItem>FAQ</MenuItem>
-                <MenuItem>Blog</MenuItem>
+                {navItems.map(({ label, sectionId }) => (
+                  <MenuItem
+                    key={sectionId}
+                    onClick={() => handleNavClick(sectionId)}
+                  >
+                    {label}
+                  </MenuItem>
+                ))}
+
                 <Divider sx={{ my: 3 }} />
                 <MenuItem>
                   <Button
