@@ -211,8 +211,8 @@ export default function SignUpCard() {
           control={<Checkbox defaultChecked />}
           label={
             <Typography variant="caption" color="text.secondary">
-              Agree to our <Link to="/terms">Terms of Service</Link> and{" "}
-              <Link to="/privacy">Privacy Policy</Link>.
+              Agree to our <Link to="">Terms of Service</Link> and{" "}
+              <Link to="">Privacy Policy</Link>.
             </Typography>
           }
         />
