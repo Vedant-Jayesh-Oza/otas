@@ -13,7 +13,7 @@ OTAS provides full observability and control over AI systems: see what every AI 
 **Vision:** A world where AI systems are operated with the same confidence and visibility as modern factories, airplanes, or power grids—never as black boxes.
 
 **Value Proposition:**
-- See what every AI did
+- See what every Agent did
 - Detect failures and understand why they failed
 - Trust what succeeded
 - Fix or replay only what broke
