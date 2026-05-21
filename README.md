@@ -21,6 +21,43 @@ OTAS provides full observability and control over AI systems: see what every AI 
 
 ---
 
+## Project Demo
+
+### 1. OTAS (Press the Image to see the Demo Video of the Project)
+[<img width="2940" height="1608" alt="1" src="https://github.com/user-attachments/assets/6a8aaeb7-dca1-4919-83ae-e9bf3d6589fb" />](https://youtu.be/_Uw_gkd4SlY)
+
+### 2. User Sign Up and Login
+<img width="2940" height="1600" alt="2" src="https://github.com/user-attachments/assets/e2a27977-f60d-4dc2-a93b-b28148446b9b" />
+
+### 3. OTAS FEATURES
+<img width="2940" height="1604" alt="3" src="https://github.com/user-attachments/assets/b45cb975-f0e2-4a83-a9cc-91c7a13638bd" />
+
+### 4. How OTAS Works
+<img width="2940" height="1604" alt="4" src="https://github.com/user-attachments/assets/503acd15-f8c8-4cb9-b760-be8a34017047" />
+
+### 5. Create OTAS SDK KEY to integrate OTAS to your backend
+<img width="2940" height="1600" alt="5" src="https://github.com/user-attachments/assets/35741c5e-9139-47cf-8421-a3ea08167ed9" />
+
+### 6. Create Agent and get Agent Key and Agent Manifest and move the file to root directory
+<img width="2940" height="1600" alt="6" src="https://github.com/user-attachments/assets/c305276c-63f8-4d7c-84c5-47a225b6f7b3" />
+
+### 7. Agent Sessions
+<img width="2940" height="1602" alt="7" src="https://github.com/user-attachments/assets/d4bd8fe2-0c11-405c-bd23-b94a11487117" />
+
+### 8. Agent Telemetry
+<img width="2940" height="1600" alt="8" src="https://github.com/user-attachments/assets/b6caafb7-d08b-490f-9581-6bbd8d2061aa" />
+
+### 9. Session Logs and Paths
+<img width="2940" height="1608" alt="Image 5-21-26 at 12 39 PM" src="https://github.com/user-attachments/assets/0d41464f-e406-4b8b-9b05-87fb3fd08ddb" />
+
+### 10. Session Details for each step
+<img width="2940" height="1606" alt="10" src="https://github.com/user-attachments/assets/cc01b461-e4de-4c42-90b2-cac57fb8dd4f" />
+
+### 11. FAQs
+<img width="2940" height="1602" alt="9" src="https://github.com/user-attachments/assets/303c0f7d-853c-4fc8-9d69-5aa585409df0" />
+
+---
+
 ## Architecture
 <img width="699" height="665" alt="image" src="https://github.com/user-attachments/assets/9cb34532-1590-4a71-92ab-c2799083a26e" />
 
