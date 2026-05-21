@@ -4,6 +4,9 @@
 
 OTAS provides full observability and control over AI systems: see what every AI did, detect failures, trust what succeeded, and fix only what broke.
 
+Learn how to use OTAS - https://mintlify.wiki/Vedant-Jayesh-Oza/otas
+
+
 ---
 
 ## Mission & Vision
