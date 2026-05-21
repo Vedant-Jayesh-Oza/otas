@@ -220,11 +220,3 @@ Full integration guide: [OtasAgentManifest.md](frontend/otas-frontend/public/Ota
 **Brain:** `BackendEvent` — `project_id`, `agent_id`, `agent_session_id`, `path`, `method`, `status_code`, `latency_ms`, request/response headers/body, `error`, `metadata`, etc.
 
 ---
-
-## Analytics (Planned / In Progress)
-
-- Bar graph: paths vs counts
-- Quartile graph: latency distribution
-- Line graphs: error rate and log count per day (last 7 days)
-- Session list with logs; DAG view of session logs
-
